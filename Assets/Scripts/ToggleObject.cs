@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,20 +8,18 @@ public class ToggleObject : MonoBehaviour
     public GameObject plane;
     public GameObject snakeHead;
     public GameObject applePrefab;
+
     private MeshRenderer myPlaneRenderer;
     private List<Color> planeColors = new List<Color>() {
         Color.red, Color.green, Color.blue, Color.yellow
     };
     private Color currentColor;
     public GameObject parentObject;
-    Renderer rend;
-    public Material orange;
 
     private void Start()
     {
         snakeHead = GameObject.CreatePrimitive(PrimitiveType.Cube);
         snakeHead.name = "snakeHead";
-        snakeHead.transform.Translate(new Vector3(0.5f, 0, 0.5f));
 
         parentObject = new GameObject("parentObject");
         myPlaneRenderer = plane.GetComponent<MeshRenderer>();
@@ -58,28 +57,23 @@ public class ToggleObject : MonoBehaviour
     {
         while (currentColor == myPlaneRenderer.material.GetColor("_Color"))
         {
-            currentColor = planeColors[Random.Range(0, planeColors.Count)];
+            currentColor = planeColors[UnityEngine.Random.Range(0, planeColors.Count)];
             //Debug.Log("Same Color.");
         }
 
         myPlaneRenderer.material.SetColor("_Color", currentColor);
     }
 
-    public void OnClickSpawnCube()
+    public void OnClickSpawnApple()
     {
-        
-        //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        //cube.transform.parent = parentObject.transform;
-        //movePrimitiv(cube);
-
-
-        GameObject newApple = Instantiate(applePrefab, new Vector3(Mathf.Floor(Random.value * 10) + 0.5f, 0, Mathf.Floor(Random.value * 10) + 0.5f), Quaternion.identity);
+        GameObject newApple = Instantiate(applePrefab, new Vector3(Mathf.Floor(UnityEngine.Random.value * 10), 0, Mathf.Floor(UnityEngine.Random.value * 10)), Quaternion.identity);
+        newApple.transform.parent = parentObject.transform;
         newApple.name = "Apple";
     }
 
     public void movePrimitiv(GameObject primitiveCube)
     {
-        primitiveCube.transform.Translate(new Vector3(Mathf.Floor(Random.value * 10) + 0.5f, 0, Mathf.Floor(Random.value * 10) + 0.5f));
+        primitiveCube.transform.Translate(new Vector3(Mathf.Floor(UnityEngine.Random.value * 10), 0, Mathf.Floor(UnityEngine.Random.value * 10)));
     }
 
     public void OnClickClear()
@@ -92,7 +86,7 @@ public class ToggleObject : MonoBehaviour
     public void OnClickSpawnSnake()
     {
         //snakeHead = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        snakeHead.transform.SetPositionAndRotation(new Vector3(0 + 0.5f, 0, 0 + 0.5f), new Quaternion(0, 0, 0, 0));
+        snakeHead.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
 
     public void OnClickMoveRight()
